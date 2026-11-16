@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .container {
+        width: 100%;
+        max-width: 460px;
+        box-sizing: border-box;
+        margin: 45px auto;
+        padding: 35px;
+        border-radius: 16px;
+    }
+
+    .register-title {
+        text-align: center;
+        font-size: 27px;
+        color: #1e293b;
+        margin-bottom: 8px;
+    }
+
+    .register-subtitle {
+        text-align: center;
+        color: #64748b;
+        font-size: 14px;
+        margin-bottom: 28px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 8px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 13px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        box-sizing: border-box;
+        outline: none;
+        font-size: 14px;
+    }
+
+    .form-group input:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+    }
+
+    .help-text {
+        color: #64748b;
+        font-size: 12px;
+        margin-top: 8px;
+        line-height: 1.6;
+    }
+
+    .help-text ul {
+        padding-left: 18px;
+        margin: 5px 0;
+    }
+
+    .error-message {
+        color: #dc2626;
+        font-size: 13px;
+        margin-top: 6px;
+    }
+
+    .register-btn {
+        width: 100%;
+        padding: 14px;
+        background: #2563eb;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .register-btn:hover {
+        background: #1d4ed8;
+    }
+
+    .login-link {
+        text-align: center;
+        margin-top: 22px;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .login-link a {
+        color: #2563eb;
+        text-decoration: none;
+        font-weight: 600;
+    }
+</style>
+
+<h2 class="register-title">Create Account</h2>
+
+<p class="register-subtitle">
+    Join Cloud File Manager and manage your files securely.
+</p>
+
+<form method="POST">
+    {% csrf_token %}
+
+    {% for field in form %}
+
+        <div class="form-group">
+
+            <label for="{{ field.id_for_label }}">
+                {{ field.label }}
+            </label>
+
+            {{ field }}
+
+            {% if field.help_text %}
+                <div class="help-text">
+                    {{ field.help_text|safe }}
+                </div>
+            {% endif %}
+
+            {% for error in field.errors %}
+                <div class="error-message">
+                    {{ error }}
+                </div>
+            {% endfor %}
+
+        </div>
+
+    {% endfor %}
+
+    <button type="submit" class="register-btn">
+        Create Account
+    </button>
+
+</form>
+
+<p class="login-link">
+    Already have an account?
+    <a href="{% url 'login' %}">Login</a>
+</p>
+
+{% endblock %}

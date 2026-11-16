@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="message {{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<h2>Login to Cloud File Manager</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <label for="username">Username</label>
+    <input
+        type="text"
+        id="username"
+        name="username"
+        autocomplete="username"
+        placeholder="Enter your username"
+        required
+    >
+
+    <br><br>
+
+    <label for="password">Password</label>
+    <input
+        type="password"
+        id="password"
+        name="password"
+        autocomplete="current-password"
+        placeholder="Enter your password"
+        required
+    >
+
+    <p style="text-align: right; margin-top: 8px;">
+        <a href="{% url 'password_reset' %}">
+            Forgot Password?
+        </a>
+    </p>
+
+    <br>
+
+    <button type="submit">Login</button>
+</form>
+
+<p style="text-align: center; margin-top: 20px;">
+    Don't have an account?
+    <a href="{% url 'register' %}">Register</a>
+</p>
+
+{% endblock %}
+```

@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "accounts"
+		},
+		{
+			"path": "cloudmanager"
+		},
+		{
+			"path": "filemanager"
+		},
+		{
+			"path": "templates"
+		},
+		{
+			"path": "venv"
+		}
+	]
+}

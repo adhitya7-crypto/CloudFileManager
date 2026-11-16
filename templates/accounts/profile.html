@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile - Cloud File Manager</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            min-height: 100vh;
+            padding: 45px 20px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .header h1 {
+            color: #111827;
+            font-size: 30px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .dashboard-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .dashboard-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .edit-btn {
+            background: #0f172a;
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background: #334155;
+            transform: translateY(-2px);
+        }
+
+        .profile-card {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        /* Profile Photo */
+
+        .avatar {
+            width: 110px;
+            height: 110px;
+            background: #dbeafe;
+            color: #2563eb;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 48px;
+            margin: 0 auto 18px;
+            object-fit: cover;
+        }
+
+        .profile-header h2 {
+            color: #111827;
+            font-size: 25px;
+            margin-bottom: 8px;
+        }
+
+        .profile-header p {
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        /* Photo Actions */
+
+        .photo-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .upload-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .upload-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .remove-btn {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .remove-btn:hover {
+            background: #fecaca;
+        }
+
+        .photo-input {
+            display: none;
+        }
+
+        .photo-note {
+            margin-top: 12px;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        /* Messages */
+
+        .message {
+            padding: 13px 16px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            font-size: 14px;
+        }
+
+        .message.success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Profile Details */
+
+        .details {
+            margin-top: 25px;
+        }
+
+        .detail-box {
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .detail-box h4 {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 9px;
+        }
+
+        .detail-box p {
+            color: #111827;
+            font-size: 16px;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        /* Statistics */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-box {
+            background: #eff6ff;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-box h3 {
+            color: #64748b;
+            font-size: 15px;
+            margin-bottom: 12px;
+        }
+
+        .stat-box h2 {
+            color: #2563eb;
+            font-size: 29px;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 600px) {
+            body {
+                padding: 25px 15px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-actions {
+                width: 100%;
+            }
+
+            .header-actions .btn {
+                flex: 1;
+                text-align: center;
+            }
+
+            .profile-card {
+                padding: 25px 18px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+
+    <div class="header">
+
+        <h1>My Profile</h1>
+
+        <div class="header-actions">
+
+            <a href="/accounts/dashboard/" class="btn dashboard-btn">
+                ← Dashboard
+            </a>
+
+            <a href="/accounts/edit-profile/" class="btn edit-btn">
+                ✏️ Edit Profile
+            </a>
+
+            <a href="{% url 'change_password' %}" class="btn edit-btn">
+              🔐 Change Password
+             </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Profile Card -->
+
+    <div class="profile-card">
+
+        <!-- Messages -->
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+
+        <!-- Profile Header -->
+
+        <div class="profile-header">
+
+            {% if profile_photo_url %}
+
+                <img
+                    src="{{ profile_photo_url }}"
+                    alt="Profile Photo"
+                    class="avatar"
+                >
+
+            {% else %}
+
+                <div class="avatar">
+                    👤
+                </div>
+
+            {% endif %}
+
+            <h2>{{ username }}</h2>
+
+            <p>Cloud File Manager User</p>
+
+
+            <!-- Upload / Change Photo -->
+
+            <form
+                method="POST"
+                action="{% url 'upload_profile_photo' %}"
+                enctype="multipart/form-data"
+                id="photoForm"
+            >
+
+                {% csrf_token %}
+
+                <input
+                    type="file"
+                    name="profile_picture"
+                    id="profilePicture"
+                    class="photo-input"
+                    accept="image/*"
+                    required
+                >
+
+                <div class="photo-actions">
+
+                    <button
+                        type="button"
+                        class="btn upload-btn"
+                        onclick="document.getElementById('profilePicture').click()"
+                    >
+                        📷 {% if profile_photo_url %}Change Photo{% else %}Upload Photo{% endif %}
+                    </button>
+
+                    {% if profile_photo_url %}
+
+                        <button
+                            type="submit"
+                            class="btn remove-btn"
+                            formaction="{% url 'remove_profile_photo' %}"
+                            formnovalidate
+                        >
+                            🗑️ Remove Photo
+                        </button>
+
+                    {% endif %}
+
+                </div>
+
+            </form>
+
+            <p class="photo-note">
+                Supported image formats. Maximum size: 5 MB.
+            </p>
+
+        </div>
+
+
+        <!-- User Details -->
+
+        <div class="details">
+
+            <div class="detail-box">
+                <h4>Username</h4>
+                <p>{{ username }}</p>
+            </div>
+
+            <div class="detail-box">
+                <h4>Email Address</h4>
+                <p>{{ email|default:"Email not added" }}</p>
+            </div>
+
+            <div class="detail-box">
+                <h4>Account Created</h4>
+                <p>{{ date_joined|date:"d M Y" }}</p>
+            </div>
+
+        </div>
+
+
+        <!-- User Statistics -->
+
+        <div class="stats">
+
+            <div class="stat-box">
+                <h3>Total Uploaded Files</h3>
+                <h2>{{ total_files|default:0 }}</h2>
+            </div>
+
+            <div class="stat-box">
+                <h3>Storage Used</h3>
+                <h2>{{ storage_used|default:0 }} MB</h2>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Automatically upload selected photo -->
+
+<script>
+
+    document.getElementById('profilePicture').addEventListener('change', function() {
+
+        if (this.files.length > 0) {
+
+            document.getElementById('photoForm').requestSubmit();
+
+        }
+
+    });
+
+</script>
+
+</body>
+</html>
