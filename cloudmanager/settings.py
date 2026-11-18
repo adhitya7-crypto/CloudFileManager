@@ -23,12 +23,10 @@ if not SECRET_KEY:
 DEBUG = os.getenv('DJANGO_DEBUG', 'True').lower() == 'true'
 
 ALLOWED_HOSTS = [
-    host.strip()
-    for host in os.getenv(
-        'ALLOWED_HOSTS',
-        '127.0.0.1,localhost,192.168.1.2'
-    ).split(',')
-    if host.strip()
+    '127.0.0.1',
+    'localhost',
+    '192.168.1.2',
+    'cloudfilemanager-6nhp.onrender.com',
 ]
 
 # Application Definition
